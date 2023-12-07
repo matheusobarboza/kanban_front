@@ -1,5 +1,6 @@
 'use client'
 
+import SelectInput from '@/components/select'
 import { Funnel, ListChecks, MagnifyingGlass } from '@phosphor-icons/react'
 import { FormEvent } from 'react'
 
@@ -41,7 +42,7 @@ export default function Home() {
             <label htmlFor="vehicle" className="text-zinc-400">
               Veículo
             </label>
-            <input type="text" name="vehicle" id="vehicle" />
+            <SelectInput />
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="tech" className="text-zinc-400">
