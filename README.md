@@ -20,6 +20,8 @@ Este projeto é um desafio de desenvolvimento que envolve a criação de um quad
   - Tecnologia;
   - Nome do cliente
 
+## Para cada status é renderizado no topo do card uma cor diferente;
+
 ## O que falta implementar:
   - Arrastar e soltar dos quadros;
   - Responsividade;
