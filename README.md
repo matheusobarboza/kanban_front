@@ -4,10 +4,11 @@ Este projeto é um desafio de desenvolvimento que envolve a criação de um quad
 
 ## Tecnologias utilizadas
 - TypeScript
-- Next.JS
+- Next.JS 14
 - Tailwind
 - ChadCn
 - Git
+- PNPM
 
 ## Link para acessar o site publicado na vercel: https://kanban-front-six.vercel.app/
 
@@ -26,4 +27,6 @@ Este projeto é um desafio de desenvolvimento que envolve a criação de um quad
   - Arrastar e soltar dos quadros;
   - Responsividade;
   - Filtro de datas
-  
+
+# Para executar o projeto localmente, basta baixar o repositório e instalar as dependências.
+# O projeto está com as configurações customizadas de lint
