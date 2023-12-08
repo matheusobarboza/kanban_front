@@ -34,6 +34,13 @@ const FilterForm = ({
   setSelectedLinkCategories,
   setSelectedStatus,
 }: FilterFormProps) => {
+  const resetForm = () => {
+    setSelectedLinkCategories(null)
+    setSelectedStatus(null)
+    setSelectedTechnology(null)
+    setSelectedVehicles([])
+  }
+
   return (
     <form onSubmit={onFilter} className="flex gap-5 items-center justify-start">
       <div className="flex flex-col gap-1">
@@ -94,6 +101,18 @@ const FilterForm = ({
       >
         Filtrar
       </button>
+      {(selectedTechnology !== null ||
+        selectedLinkCategories !== null ||
+        selectedStatus !== null ||
+        selectedVehicles.length > 0) && (
+        <button
+          type="submit"
+          className=" self-end ml-5 uppercase h-7 px-10 border border-[#4D7EA8] rounded"
+          onClick={() => resetForm()}
+        >
+          Limpar Filtros
+        </button>
+      )}
     </form>
   )
 }
