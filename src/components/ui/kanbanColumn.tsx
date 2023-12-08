@@ -13,7 +13,7 @@ export function KanbanColumn({ vehicles, title }: SectionProps) {
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-2 text-sm text-white uppercase">
           {title}
-          <div className="border px-1">5</div>
+          <div className="border px-1">{vehicles?.length}</div>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center justify-center gap-3">

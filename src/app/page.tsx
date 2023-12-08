@@ -1,6 +1,5 @@
 'use client'
 
-import { DatePickerInput } from '@/components/ui/customDatePicker'
 import { KanbanColumn } from '@/components/ui/kanbanColumn'
 import {
   columnTitles,
@@ -13,8 +12,8 @@ import { Funnel, ListChecks, MagnifyingGlass } from '@phosphor-icons/react'
 import { FormEvent, useEffect, useState } from 'react'
 import { Vehicle } from '@/interfaces/vehicle'
 import { generateRandomClientName, shuffle } from '@/helpers/shuflle'
-import { MultipleSelect } from '@/components/ui/multipleSelect'
-import { SelectInput } from '@/components/ui/selectInput'
+import FilterForm from '@/components/ui/filterForm'
+import { Input } from '@/components/ui/input'
 
 export default function Home() {
   const [kanbanColumns, setKanbanColumns] = useState<Array<Vehicle[]>>([])
@@ -26,6 +25,11 @@ export default function Home() {
   const [selectedTechnology, setSelectedTechnology] = useState<string | null>(
     null,
   )
+  const [selectedLinkCategories, setSelectedLinkCategories] = useState<
+    string | null
+  >(null)
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {
     const randomVehicles: Vehicle[] = Array.from({ length: 20 }, () => {
@@ -83,14 +87,27 @@ export default function Home() {
     e.preventDefault()
 
     const filteredKanban = kanbanColumns.map(column =>
-      column.filter(
-        vehicle =>
+      column.filter(vehicle => {
+        const matchPlate = vehicle.plate
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+        const matchClientName = vehicle.clientName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+
+        return (
           (selectedVehicles.length === 0 ||
             selectedVehicles.includes(vehicle.plate)) &&
           (selectedTechnology === null ||
-            vehicle.technology === selectedTechnology),
-      ),
+            vehicle.technology === selectedTechnology) &&
+          (selectedLinkCategories === null ||
+            vehicle.linkCategory === selectedLinkCategories) &&
+          (selectedStatus === null || vehicle.status === selectedStatus) &&
+          (matchPlate || matchClientName)
+        )
+      }),
     )
+
     setFilteredKanbanColumns(filteredKanban)
   }
 
@@ -104,7 +121,13 @@ export default function Home() {
         <div className="flex w-2/5 justify-between gap-5 h-full items-center text-sm">
           <div className="flex flex-1 gap-5 items-center px-10 border h-full border-t-0 border-b-0">
             <MagnifyingGlass size={22} />
-            <span>Placa, nome do motorista</span>
+            <Input
+              type="text"
+              placeholder="Placa, nome do motorista"
+              className="border-none"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
           </div>
           <div className="flex gap-5 items-center px-1 h-full">
             <Funnel size={22} />
@@ -113,73 +136,21 @@ export default function Home() {
         </div>
       </div>
       <div className="flex-1 bg-[#F9F9F9] p-5">
-        <form
-          onSubmit={onFilter}
-          className="flex gap-5 items-center justify-start"
-        >
-          <div className="flex flex-col gap-1">
-            <label htmlFor="period" className="text-zinc-400">
-              Selecione o período
-            </label>
-            <DatePickerInput id="period" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="vehicle" className="text-zinc-400">
-              Veículo
-            </label>
-            <MultipleSelect
-              options={listPlates}
-              placeholder="Selecione um veículo"
-              selectedValues={selectedVehicles}
-              onSelectChange={setSelectedVehicles}
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="tech" className="text-zinc-400">
-              Tecnologia
-            </label>
-            <SelectInput
-              options={technologies}
-              placeholder="Selecione uma tecnologia"
-              selectedValue={selectedTechnology}
-              onSelectChange={selectedValue =>
-                setSelectedTechnology(selectedValue)
-              }
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="category" className="text-zinc-400">
-              Categorias de Vínculo
-            </label>
-            <SelectInput
-              options={linkCategories}
-              placeholder="Selecione uma categoria"
-              selectedValue={selectedTechnology}
-              onSelectChange={selectedValue =>
-                setSelectedTechnology(selectedValue)
-              }
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="status" className="text-zinc-400">
-              Situação
-            </label>
-            <SelectInput
-              options={status}
-              placeholder="Selecione uma situação"
-              selectedValue={selectedTechnology}
-              onSelectChange={selectedValue =>
-                setSelectedTechnology(selectedValue)
-              }
-            />
-          </div>
-          <button
-            type="submit"
-            className=" self-end ml-5 uppercase h-7 px-10 bg-[#4D7EA8] text-white rounded"
-          >
-            Filtrar
-          </button>
-        </form>
+        <FilterForm
+          linkCategories={linkCategories}
+          listPlates={listPlates}
+          onFilter={onFilter}
+          selectedLinkCategories={selectedLinkCategories}
+          setSelectedLinkCategories={setSelectedLinkCategories}
+          selectedStatus={selectedStatus}
+          setSelectedStatus={setSelectedStatus}
+          selectedTechnology={selectedTechnology}
+          setSelectedTechnology={setSelectedTechnology}
+          selectedVehicles={selectedVehicles}
+          setSelectedVehicles={setSelectedVehicles}
+          status={status}
+          technologies={technologies}
+        />
         <div className="grid grid-cols-5 gap-6 my-5">
           {filteredKanbanColumns.map((coluna, idx) => (
             <KanbanColumn

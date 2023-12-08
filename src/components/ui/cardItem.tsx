@@ -12,7 +12,8 @@ export function CardItem({ vehicle }: CardItemProps) {
         className={`w-full h-1 bg-gradient-to-r absolute inset-x-0 top-0
           ${
             vehicle.status.toLowerCase() === 'agendado' ||
-            vehicle.status.toLowerCase() === 'reagendado'
+            vehicle.status.toLowerCase() === 'reagendado' ||
+            vehicle.status.toLowerCase() === 'aprovado'
               ? 'from-green-300 to-green-700'
               : vehicle.status.toLowerCase() === 'pendente'
                 ? 'from-orange-300 to-orange-500'
