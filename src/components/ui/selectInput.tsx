@@ -1,34 +1,41 @@
+// Importações necessárias
+import * as React from 'react'
+import { Button } from '@/components/ui/button'
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './select'
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
-interface SelectProps {
+interface SingleSelectProps {
   options: string[]
   placeholder: string
+  selectedValue: string | null
+  onSelectChange: (selectedValue: string | null) => void
 }
 
-const SelectInput = ({ options, placeholder }: SelectProps) => {
+export function SelectInput({
+  options,
+  placeholder,
+  selectedValue,
+  onSelectChange,
+}: SingleSelectProps) {
   return (
-    <Select>
-      <SelectTrigger className="w-[180px] h-7">
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent className="bg-white">
-        <SelectGroup>
-          {options.map((option, idx) => (
-            <SelectItem key={`${option}_${idx}`} value={option}>
-              {option}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild className="w-[180px] h-7">
+        <Button variant="outline">{selectedValue || placeholder}</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56 bg-white">
+        {options?.map((option, idx) => (
+          <DropdownMenuItem
+            key={`${option}_${idx}`}
+            onClick={() => onSelectChange(option)}
+          >
+            {option}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
-
-export default SelectInput

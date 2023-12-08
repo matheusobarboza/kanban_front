@@ -2,7 +2,6 @@
 
 import { DatePickerInput } from '@/components/ui/customDatePicker'
 import { KanbanColumn } from '@/components/ui/kanbanColumn'
-import SelectInput from '@/components/ui/selectInput'
 import {
   columnTitles,
   letters,
@@ -14,9 +13,19 @@ import { Funnel, ListChecks, MagnifyingGlass } from '@phosphor-icons/react'
 import { FormEvent, useEffect, useState } from 'react'
 import { Vehicle } from '@/interfaces/vehicle'
 import { generateRandomClientName, shuffle } from '@/helpers/shuflle'
+import { MultipleSelect } from '@/components/ui/multipleSelect'
+import { SelectInput } from '@/components/ui/selectInput'
 
 export default function Home() {
   const [kanbanColumns, setKanbanColumns] = useState<Array<Vehicle[]>>([])
+  const [filteredKanbanColumns, setFilteredKanbanColumns] = useState<
+    Array<Vehicle[]>
+  >([])
+  const [listPlates, setListPlates] = useState<string[]>([])
+  const [selectedVehicles, setSelectedVehicles] = useState<string[]>([])
+  const [selectedTechnology, setSelectedTechnology] = useState<string | null>(
+    null,
+  )
 
   useEffect(() => {
     const randomVehicles: Vehicle[] = Array.from({ length: 20 }, () => {
@@ -65,11 +74,24 @@ export default function Home() {
       columns.push(shuffle(filteredVehicles))
     })
 
+    setFilteredKanbanColumns(columns)
     setKanbanColumns(columns)
+    setListPlates(randomVehicles.map(vehicle => vehicle.plate))
   }, [])
 
   const onFilter = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    const filteredKanban = kanbanColumns.map(column =>
+      column.filter(
+        vehicle =>
+          (selectedVehicles.length === 0 ||
+            selectedVehicles.includes(vehicle.plate)) &&
+          (selectedTechnology === null ||
+            vehicle.technology === selectedTechnology),
+      ),
+    )
+    setFilteredKanbanColumns(filteredKanban)
   }
 
   return (
@@ -105,7 +127,12 @@ export default function Home() {
             <label htmlFor="vehicle" className="text-zinc-400">
               Veículo
             </label>
-            <SelectInput options={status} placeholder="Selecione um veículo" />
+            <MultipleSelect
+              options={listPlates}
+              placeholder="Selecione um veículo"
+              selectedValues={selectedVehicles}
+              onSelectChange={setSelectedVehicles}
+            />
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="tech" className="text-zinc-400">
@@ -114,6 +141,10 @@ export default function Home() {
             <SelectInput
               options={technologies}
               placeholder="Selecione uma tecnologia"
+              selectedValue={selectedTechnology}
+              onSelectChange={selectedValue =>
+                setSelectedTechnology(selectedValue)
+              }
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -123,6 +154,10 @@ export default function Home() {
             <SelectInput
               options={linkCategories}
               placeholder="Selecione uma categoria"
+              selectedValue={selectedTechnology}
+              onSelectChange={selectedValue =>
+                setSelectedTechnology(selectedValue)
+              }
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -132,6 +167,10 @@ export default function Home() {
             <SelectInput
               options={status}
               placeholder="Selecione uma situação"
+              selectedValue={selectedTechnology}
+              onSelectChange={selectedValue =>
+                setSelectedTechnology(selectedValue)
+              }
             />
           </div>
           <button
@@ -142,7 +181,7 @@ export default function Home() {
           </button>
         </form>
         <div className="grid grid-cols-5 gap-6 my-5">
-          {kanbanColumns.map((coluna, idx) => (
+          {filteredKanbanColumns.map((coluna, idx) => (
             <KanbanColumn
               key={idx}
               title={columnTitles[idx]}
