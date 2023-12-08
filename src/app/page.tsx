@@ -5,9 +5,11 @@ import { Section } from '@/components/ui/section'
 import SelectInput from '@/components/ui/selectInput'
 import { linkCategories, status, technologies } from '@/utils/dataFilter'
 import { Funnel, ListChecks, MagnifyingGlass } from '@phosphor-icons/react'
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 
 export default function Home() {
+  const [listVehicles, setVehicles] = useState([])
+
   const onFilter = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }

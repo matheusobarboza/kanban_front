@@ -2,14 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function CardItem() {
   return (
-    <Card className="w-full h-32 rounded p-0 bg-red-50 flex flex-col justify-between">
-      <CardHeader>
+    <Card className="w-full h-32 rounded bg-red-50 flex flex-col justify-between gap-3">
+      <CardHeader className="h-5">
         <CardTitle className="flex text-sm items-center justify-between">
           <span className="bg-[#76818E] px-1 rounded text-white">ABC-9D87</span>
           <span className="bg-red-600 rounded-full px-2 text-white">!</span>
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-2 items-start">
         <span>Nome do cliente</span>
         <div className="mt-2 flex text-xs justify-between items-center w-full gap-2">
           <div className="rounded bg-red-600 text-white px-1 py-[.8px]">
