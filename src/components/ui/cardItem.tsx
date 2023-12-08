@@ -1,26 +1,44 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Vehicle } from '@/interfaces/vehicle'
+import { DotsThreeVertical } from '@phosphor-icons/react'
 
-export function CardItem() {
+interface CardItemProps {
+  vehicle: Vehicle
+}
+
+export function CardItem({ vehicle }: CardItemProps) {
   return (
-    <Card className="w-full h-32 rounded bg-red-50 flex flex-col justify-between gap-3">
-      <CardHeader className="h-5">
-        <CardTitle className="flex text-sm items-center justify-between">
-          <span className="bg-[#76818E] px-1 rounded text-white">ABC-9D87</span>
-          <span className="bg-red-600 rounded-full px-2 text-white">!</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2 items-start">
-        <span>Nome do cliente</span>
-        <div className="mt-2 flex text-xs justify-between items-center w-full gap-2">
-          <div className="rounded bg-red-600 text-white px-1 py-[.8px]">
-            00:01
-          </div>
-          <div className="flex justify-between items-center gap-2 rounded bg-white px-1 py-[.8px]">
-            <span>TOTAL |</span>
-            <span>00:01</span>
-          </div>
+    <div className="bg-gray-100 p-5 rounded-lg shadow-md flex flex-col relative overflow-hidden">
+      <span
+        className={`w-full h-1 bg-gradient-to-r absolute inset-x-0 top-0
+          ${
+            vehicle.status.toLowerCase() === 'agendado' ||
+            vehicle.status.toLowerCase() === 'reagendado'
+              ? 'from-green-300 to-green-700'
+              : vehicle.status.toLowerCase() === 'pendente'
+                ? 'from-orange-300 to-orange-500'
+                : vehicle.status.toLowerCase() === 'reprovado'
+                  ? 'from-pink-700 to-red-700'
+                  : ''
+          }
+        `}
+      ></span>
+      <h4 className="flex justify-between items-center mt-3">
+        <span className="">{vehicle.plate}</span>
+        <DotsThreeVertical className="w-5 h-5 text-gray-500" />
+      </h4>
+
+      <div>
+        <span className="text-gray-500">{vehicle.clientName}</span>
+      </div>
+
+      <div className="mt-4 flex text-xs justify-between items-center w-full gap-5">
+        <div className="bg-red-600 text-white rounded-lg p-1">00:01</div>
+        <div className="flex justify-between items-center rounded-lg p-1 bg-white gap-2">
+          <span>TOTAL</span>
+          <span>|</span>
+          <span>00:01</span>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

@@ -1,14 +1,72 @@
 'use client'
 
 import { DatePickerInput } from '@/components/ui/customDatePicker'
-import { Section } from '@/components/ui/section'
+import { KanbanColumn } from '@/components/ui/kanbanColumn'
 import SelectInput from '@/components/ui/selectInput'
-import { linkCategories, status, technologies } from '@/utils/dataFilter'
+import {
+  columnTitles,
+  letters,
+  linkCategories,
+  status,
+  technologies,
+} from '@/utils/dataFilter'
 import { Funnel, ListChecks, MagnifyingGlass } from '@phosphor-icons/react'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
+import { Vehicle } from '@/interfaces/vehicle'
+import { generateRandomClientName, shuffle } from '@/helpers/shuflle'
 
 export default function Home() {
-  const [listVehicles, setVehicles] = useState([])
+  const [kanbanColumns, setKanbanColumns] = useState<Array<Vehicle[]>>([])
+
+  useEffect(() => {
+    const randomVehicles: Vehicle[] = Array.from({ length: 20 }, () => {
+      const plate = `${letters[Math.floor(Math.random() * 26)]}${
+        letters[Math.floor(Math.random() * 26)]
+      }${letters[Math.floor(Math.random() * 26)]}-${Math.floor(
+        Math.random() * 9999,
+      )
+        .toString()
+        .padStart(4, '0')}`
+
+      return {
+        plate,
+        linkCategory:
+          linkCategories[Math.floor(Math.random() * linkCategories.length)],
+        technology:
+          technologies[Math.floor(Math.random() * technologies.length)],
+        status: status[Math.floor(Math.random() * status.length)],
+        clientName: generateRandomClientName(),
+      }
+    })
+
+    const columns: Vehicle[][] = []
+
+    Array.from({ length: 5 }).forEach((_, index) => {
+      const numVeiculosNaColuna = Math.floor(Math.random() * 5) + 1
+      const startIndex = index * numVeiculosNaColuna
+
+      const vehiclesInColumn = randomVehicles.slice(
+        startIndex,
+        startIndex + numVeiculosNaColuna,
+      )
+
+      // Verifica se as placas já existem em outras colunas
+      const filteredVehicles = vehiclesInColumn.filter(
+        vehicle =>
+          !columns.some(
+            (otherColumn, otherIndex) =>
+              otherIndex !== index &&
+              otherColumn.some(
+                otherVehicle => otherVehicle.plate === vehicle.plate,
+              ),
+          ),
+      )
+
+      columns.push(shuffle(filteredVehicles))
+    })
+
+    setKanbanColumns(columns)
+  }, [])
 
   const onFilter = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -83,12 +141,14 @@ export default function Home() {
             Filtrar
           </button>
         </form>
-        <div className="flex flex-1 py-2 mt-5 gap-4">
-          <Section title="Espelhamento" />
-          <Section title="Embarque de macros" />
-          <Section title="Teste" />
-          <Section title="Video chamadas" />
-          <Section title="Encerradas" />
+        <div className="grid grid-cols-5 gap-6 my-5">
+          {kanbanColumns.map((coluna, idx) => (
+            <KanbanColumn
+              key={idx}
+              title={columnTitles[idx]}
+              vehicles={coluna}
+            />
+          ))}
         </div>
       </div>
     </main>

@@ -18,3 +18,12 @@ export const status = [
   'Aprovado',
   'Reprovado',
 ]
+
+export const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+export const columnTitles = [
+  'Espelhamento',
+  'Embarque de macros',
+  'Testes',
+  'Vídeo chamadas',
+  'Encerradas',
+]
