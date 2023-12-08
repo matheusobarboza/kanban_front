@@ -1,6 +1,9 @@
 'use client'
 
-import SelectInput from '@/components/select'
+import { DatePickerInput } from '@/components/ui/customDatePicker'
+import { Section } from '@/components/ui/section'
+import SelectInput from '@/components/ui/selectInput'
+import { linkCategories, status, technologies } from '@/utils/dataFilter'
 import { Funnel, ListChecks, MagnifyingGlass } from '@phosphor-icons/react'
 import { FormEvent } from 'react'
 
@@ -36,41 +39,55 @@ export default function Home() {
             <label htmlFor="period" className="text-zinc-400">
               Selecione o período
             </label>
-            <input type="date" name="period" id="period" />
+            <DatePickerInput id="period" />
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="vehicle" className="text-zinc-400">
               Veículo
             </label>
-            <SelectInput />
+            <SelectInput options={status} placeholder="Selecione um veículo" />
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="tech" className="text-zinc-400">
               Tecnologia
             </label>
-            <input type="text" id="tech" name="tech" />
+            <SelectInput
+              options={technologies}
+              placeholder="Selecione uma tecnologia"
+            />
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="category" className="text-zinc-400">
-              Categoria do veículo
+              Categorias de Vínculo
             </label>
-            <input type="text" name="category" id="category" />
+            <SelectInput
+              options={linkCategories}
+              placeholder="Selecione uma categoria"
+            />
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="status" className="text-zinc-400">
               Situação
             </label>
-            <input type="text" name="status" id="status" />
+            <SelectInput
+              options={status}
+              placeholder="Selecione uma situação"
+            />
           </div>
-          {/* <div className="self-end"> */}
           <button
             type="submit"
             className=" self-end ml-5 uppercase h-7 px-10 bg-[#4D7EA8] text-white rounded"
           >
             Filtrar
           </button>
-          {/* </div> */}
         </form>
+        <div className="flex flex-1 py-2 mt-5 gap-4">
+          <Section title="Espelhamento" />
+          <Section title="Embarque de macros" />
+          <Section title="Teste" />
+          <Section title="Video chamadas" />
+          <Section title="Encerradas" />
+        </div>
       </div>
     </main>
   )

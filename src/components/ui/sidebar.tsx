@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const Sidebar = () => {
   return (
-    <div className='bg-[#f0f0f0] h-screen overflow-auto flex flex-col items-center min-w-[200px] md:w-full md:h-auto md:relative"'>
+    <div className='bg-[#f0f0f0] min-h-full flex flex-col items-center min-w-[200px] md:w-full md:relative"'>
       <div className="bg-[#13262F] py-8 h-20 w-full flex justify-center items-center">
         <PaperPlaneTilt size={28} className="text-[#db9911]" />
         <span className="text-white uppercase italic">Monittora</span>
